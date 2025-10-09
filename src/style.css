@@ -11,6 +11,11 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+
+  font-family: "Google Sans Code", monospace;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
 }
 
 
