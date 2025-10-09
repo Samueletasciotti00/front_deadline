@@ -1,21 +1,23 @@
 <script>
 import Navbar from './components/Navbar.vue';
+import Login from './components/Login.vue';
+import Home from './components/Home.vue';
+import Deadlines from './components/Deadlines.vue';
+
 export default {
       components: {
-        Navbar 
+        Navbar,
+        Login,
+        Home,
+        Deadlines
       }
     }
 </script>
 
-<template>
-  <h1>Home Page</h1>
-  <Navbar />
+<template>  
+  <Navbar></Navbar>
+  <router-view></router-view>
 </template>
 
 <style scoped>
-h1 {
-  color: #42b983;
-  text-align: center;
-  padding: 1rem;
-}
 </style>
