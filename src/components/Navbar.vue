@@ -1,9 +1,12 @@
 <script>
+
 export default {
   data() {
+
     return {
       name: "Navbar",
     };
+    
   },
 };
 </script>
@@ -13,7 +16,15 @@ export default {
     <span>Scadenziario - Comune di Priverno</span>
 
     <ul>
-      <li><button>Login</button></li>
+      <li>
+        <a href="Home"><button>Home</button></a>
+      </li>
+      <li>
+        <a href="Deadlines"><button>Deadlines</button></a>
+      </li>
+      <li>
+        <a href="Login"><button>Login</button></a>
+      </li>
     </ul>
   </nav>
 </template>
@@ -24,6 +35,11 @@ nav {
   background-color: #303134;
   color: white;
   padding: 1rem;
+}
+
+a {
+  text-decoration: none;
+  color: white;
 }
 
 /* Impostazioni della navbar */
@@ -43,18 +59,18 @@ nav ul {
   padding: 0;
 }
 
-button{
-    background-color: #303134;
-    border: 1px solid white;
-    color: white;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: 0.4s;
-    font-weight: bolder;
+button {
+  background-color: #303134;
+  border: 1px solid white;
+  color: white;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: 0.4s;
+  font-weight: bolder;
 }
 
 button:hover {
-    background-color: #42b983;
+  background-color: #42b983;
 }
 </style>
