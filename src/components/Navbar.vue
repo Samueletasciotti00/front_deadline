@@ -1,13 +1,19 @@
 <script>
+import { store } from "../store";
+import { useRouter } from "vue-router";
 
 export default {
-  data() {
+  setup() {
+    const router = useRouter();
 
-    return {
-      name: "Navbar",
-    };
-    
-  },
+    function logout() {
+      localStorage.removeItem("token");
+      store.loggedIn = false;
+      router.push("/login"); // cambio pagina SENZA refresh
+    }
+
+    return { store, logout };
+  }
 };
 </script>
 
@@ -16,21 +22,35 @@ export default {
     <span>Scadenziario - Comune di Priverno</span>
 
     <ul>
-      <li>
-        <a href="Home"><button>Home</button></a>
+      <!-- Mostra se NON loggato -->
+      <li v-if="!store.loggedIn">
+        <router-link to="/"><button>Home</button></router-link>
       </li>
-      <li>
-        <a href="Deadlines"><button>Deadlines</button></a>
+
+      <!-- Mostra Deadlines solo se loggato -->
+      <li v-if="store.loggedIn">
+        <router-link to="/deadlines"><button>Tasks</button></router-link>
       </li>
-      <li>
-        <a href="Login"><button>Login</button></a>
+
+      <!-- Se NON loggato -> mostra Login -->
+      <li v-if="!store.loggedIn">
+        <router-link to="/login"><button>Login</button></router-link>
+      </li>
+
+      <!-- Se loggato -> mostra Logout -->
+      <li v-else>
+        <button @click="logout">Logout</button>
       </li>
     </ul>
   </nav>
 </template>
 
+
 <style scoped>
 /* General */
+button:focus {
+  outline: none;
+}
 nav {
   background-color: #303134;
   color: white;

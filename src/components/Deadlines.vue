@@ -1,14 +1,16 @@
 <script>
 import axios from "axios";
-
+import { store } from "../store";
 export default {
   name: "Deadlines",
+  setup() {
+    return {store};
+  },
   data() {
     return {
       deadlines: [],
       error: null,
       isLoading: false,
-      permessoAccordato: false
     };
   },
   mounted() {
@@ -33,17 +35,17 @@ export default {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
+        
         });
-
         const data = response.data;
-        console.log("Dati ottenuti->", data);
         this.deadlines = data;
-        this.permessoAccordato = true;
+        
+        // Aggiorno lo userRole nell
       } catch (error) {
         console.error("Errore nel caricamento delle deadlines:", error);
         this.error =
           error.response?.data?.message || "Errore durante il caricamento";
-        this.permessoAccordato = false;
+        localStorage.removeItem('token');
       } finally {
         this.isLoading = false;
       }
@@ -53,7 +55,7 @@ export default {
 </script>
 
 <template>
-  <h1>Pagina Delle Deadlines</h1>
+  <!-- <h1>Pagina Delle Deadlines</h1> -->
 
   <div v-if="isLoading">Caricamento...</div>
   <div v-else-if="error" class="error">{{ error }}</div>
@@ -65,7 +67,6 @@ export default {
         <th>Titolo</th>
         <th>Descrizione</th>
         <th>Scadenza</th>
-        <th>Assegnata a</th>
         <th>Azioni</th>
       </tr>
     </thead>
@@ -77,13 +78,12 @@ export default {
         <td>
           {{ formatDate(deadline.deadline) }}
         </td>
-        <td>
-          {{ deadline.taken_by_user_id ? deadline.taken_by_user_id : "Disponibile" }}
-        </td>
+        
+
         <td>
           <!-- QUI POI ANDRANNO I BOTTONI -->
           <!-- Esempi (per ora solo placeholder) -->
-          <button class="action-btn">Modifica</button>
+          <button v-if="store.userRole === 'ADMIN' " class="action-btn">Modifica</button>
           <button class="action-btn">Prendi in carico</button>
         </td>
       </tr>
@@ -93,6 +93,10 @@ export default {
 
 
 <style scoped>
+thead{
+    display: run-in;
+}
+
 .error{
     color: #ff6b6b;
     text-align: center;

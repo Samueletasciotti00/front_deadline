@@ -1,8 +1,12 @@
 <script>
 import axios from "axios";
+import { store } from "../store";
 
 export default {
   name: "Login",
+  setup() {
+    return { store };
+  },
   data() {
     return {
       email: "",
@@ -22,37 +26,37 @@ export default {
           email: this.email,
           password: this.password,
         });
-
         const data = response.data;
-        console.log(data);
 
         // Salva il token dalla risposta
         this.token = data.token;
         localStorage.setItem("token", data.token);
-
+        localStorage.setItem("userRole", data.user.role);
         // Opzionalmente salva le info utente
         if (data.email) {
           localStorage.setItem("userEmail", data.email);
         }
-
+        // Salvo il ruolo dell'utente nello store
+        store.userRole = data.user.role;
+        store.loggedIn = true;
         // Reindirizza o emetti un evento di successo
-        this.$router.push("/deadlines"); 
-
+        this.$router.push("/deadlines");
       } catch (error) {
         console.error("Errore nel login:", error);
         this.error = error.response?.data?.message || "Errore durante il login";
       } finally {
         this.isLoading = false;
+        
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <template>
   <div class="login-container">
     <h2>Accedi</h2>
-    
+
     <div v-if="error" class="error-message">
       {{ error }}
     </div>
@@ -60,12 +64,12 @@ export default {
     <form @submit.prevent="callApi">
       <div class="form-group">
         <label for="email">Email</label>
-        <input 
-          type="email" 
+        <input
+          type="email"
           id="email"
-          v-model="email" 
-          placeholder="Email" 
-          required 
+          v-model="email"
+          placeholder="Email"
+          required
           :disabled="isLoading"
         />
       </div>
@@ -82,12 +86,8 @@ export default {
         />
       </div>
 
-      <button 
-        type="submit" 
-        class="login-btn"
-        :disabled="isLoading"
-      >
-        {{ isLoading ? 'Caricamento...' : 'Login' }}
+      <button type="submit" class="login-btn" :disabled="isLoading">
+        {{ isLoading ? "Caricamento..." : "Login" }}
       </button>
     </form>
   </div>
