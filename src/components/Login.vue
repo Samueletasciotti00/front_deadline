@@ -39,6 +39,7 @@ export default {
         // Salvo il ruolo dell'utente nello store
         store.userRole = data.user.role;
         store.loggedIn = true;
+        store.userId = data.user.id;
         // Reindirizza o emetti un evento di successo
         this.$router.push("/deadlines");
       } catch (error) {
