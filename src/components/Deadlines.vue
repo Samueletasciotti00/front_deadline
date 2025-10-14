@@ -4,7 +4,7 @@ import { store } from "../store";
 export default {
   name: "Deadlines",
   setup() {
-    return {store};
+    return { store };
   },
   data() {
     return {
@@ -35,17 +35,36 @@ export default {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        
         });
         const data = response.data;
         this.deadlines = data;
-        
+
         // Aggiorno lo userRole nell
       } catch (error) {
         console.error("Errore nel caricamento delle deadlines:", error);
         this.error =
           error.response?.data?.message || "Errore durante il caricamento";
-        localStorage.removeItem('token');
+        localStorage.removeItem("token");
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    takeDeadline(id) {
+      try {
+        const response = axios.post(
+          `http://127.0.0.1:3333/deadlines/${id}/take`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        alert("Hai preso in carico la deadline con ID: " + id);
+      } catch (error) {
+        console.error("Errore nel prendere in carico la deadline:", error);
+        this.error =
+          error.response?.data?.message || "Errore durante il caricamento";
       } finally {
         this.isLoading = false;
       }
@@ -78,29 +97,31 @@ export default {
         <td>
           {{ formatDate(deadline.deadline) }}
         </td>
-        
 
         <td>
           <!-- QUI POI ANDRANNO I BOTTONI -->
           <!-- Esempi (per ora solo placeholder) -->
-          <button v-if="store.userRole === 'ADMIN' " class="action-btn">Modifica</button>
-          <button class="action-btn">Prendi in carico</button>
+          <button v-if="store.userRole === 'ADMIN'" class="action-btn">
+            Modifica
+          </button>
+          <button @click="takeDeadline(deadline.id)" class="action-btn">
+            Prendi in carico
+          </button>
         </td>
       </tr>
     </tbody>
   </table>
 </template>
 
-
 <style scoped>
-thead{
-    display: run-in;
+thead {
+  display: run-in;
 }
 
-.error{
-    color: #ff6b6b;
-    text-align: center;
-    margin: 1rem 0;
+.error {
+  color: #ff6b6b;
+  text-align: center;
+  margin: 1rem 0;
 }
 .deadlines-table {
   width: 90%;
@@ -112,7 +133,7 @@ thead{
   color: rgba(255, 255, 255, 0.87); /* testo leggero */
   font-family: "Google Sans Code", monospace;
   font-weight: 300;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .deadlines-table thead {
@@ -189,5 +210,4 @@ h1 {
   color: rgba(255, 255, 255, 0.87);
   font-weight: 400;
 }
-
 </style>
