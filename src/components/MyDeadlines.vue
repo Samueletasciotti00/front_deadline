@@ -51,14 +51,12 @@ export default {
           });
 
           const data = response.data;
-          console.log("All deadlines(MyDeadlines)->", data);
           this.deadlines = data;
           // Filtra solo le deadline prese dall'utente
           this.myDeadlines = this.deadlines.filter(
             (deadline) =>
               Number(deadline.takenByUserId) === Number(store.userId)
           );
-          console.log("deadline filter->", this.myDeadlines);
         } catch (error) {
           console.error("Errore nel caricamento delle deadlines:", error);
           this.error =
@@ -71,6 +69,34 @@ export default {
         } finally {
           this.isLoading = false;
         }
+      }
+    },
+    async removeTask(id) {
+      this.error = null;
+      this.isLoading = true;
+
+      try {
+        console.log("Provo a rimuovere il task con id", id);
+
+        const token = localStorage.getItem("token");
+        const response = await axios.post(
+          `http://127.0.0.1:3333/deadlines/${id}/release`,
+          null,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        console.log(
+          `Risposta alla rimozione della deadline ID: ${id}`,
+          response
+        );
+        this.callApi();
+      } catch (err) {
+        console.error(err);
+        this.error = "Errore nella rimozione del task";
+      } finally {
+        this.isLoading = false;
       }
     },
   },
@@ -100,7 +126,9 @@ export default {
         <td>{{ formatDate(deadline.deadline) }}</td>
         <td>{{ deadline.status }}</td>
         <td>
-          <button @click="removeTask()" class="action-btn">Rimuovi</button>
+          <button @click="removeTask(deadline.id)" class="action-btn">
+            Rimuovi
+          </button>
         </td>
       </tr>
     </tbody>
