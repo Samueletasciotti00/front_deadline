@@ -9,17 +9,19 @@ export default {
     function logout() {
       localStorage.removeItem("token");
       store.loggedIn = false;
+      store.userName = null;
       router.push("/login"); // cambio pagina SENZA refresh
     }
 
     return { store, logout };
-  }
+  },
 };
 </script>
 
 <template>
   <nav>
-    <span>Scadenziario - Comune di Priverno</span>
+    <span>Scadenziario - Comune di Priverno </span>
+    <span v-if="store.userName !== null">type: {{store.userName}}</span>
 
     <ul>
       <!-- Mostra se NON loggato -->
@@ -28,6 +30,10 @@ export default {
       </li>
 
       <!-- Mostra Deadlines solo se loggato -->
+      <li v-if="store.loggedIn">
+        <router-link to="/my-deadlines"><button>My Tasks</button></router-link>
+      </li>
+
       <li v-if="store.loggedIn">
         <router-link to="/deadlines"><button>Tasks</button></router-link>
       </li>
@@ -44,7 +50,6 @@ export default {
     </ul>
   </nav>
 </template>
-
 
 <style scoped>
 /* General */
