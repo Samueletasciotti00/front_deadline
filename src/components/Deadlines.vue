@@ -76,8 +76,6 @@ export default {
             },
           }
         );
-        alert("Hai preso in carico la deadline con ID: " + id);
-
         // Aggiorna la lista locale per riflettere il cambio
         this.callApi();
       } catch (error) {
@@ -123,6 +121,10 @@ export default {
       </tr>
     </tbody>
   </table>
+
+  <div v-if="!deadlines.length && !isLoading" class="error">
+    Non sono presenti deadline.
+  </div>
 </template>
 
 <style scoped>
