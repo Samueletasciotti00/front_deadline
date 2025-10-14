@@ -13,7 +13,7 @@ export default {
       password: "",
       token: "",
       error: null,
-      isLoading: false
+      isLoading: false,
     };
   },
   methods: {
@@ -21,33 +21,39 @@ export default {
       this.error = null;
       this.isLoading = true;
 
-      try {
-        const response = await axios.post("http://127.0.0.1:3333/login", {
-          email: this.email,
-          password: this.password,
-        });
-        const data = response.data;
+      if (store.loggedIn == false) {
+        try {
+          const response = await axios.post("http://127.0.0.1:3333/login", {
+            email: this.email,
+            password: this.password,
+          });
+          const data = response.data;
 
-        // Salva il token dalla risposta
-        this.token = data.token;
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("userRole", data.user.role);
-        // Opzionalmente salva le info utente
-        if (data.email) {
-          localStorage.setItem("userEmail", data.email);
+          // Salva il token dalla risposta
+          this.token = data.token;
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("userRole", data.user.role);
+          // Opzionalmente salva le info utente
+          if (data.email) {
+            localStorage.setItem("userEmail", data.email);
+          }
+          // Salvo il ruolo dell'utente nello store
+          store.userRole = data.user.role;
+          store.userName = data.user.name;
+          console.log("Nome Utente:", store.userName);
+          store.loggedIn = true;
+          store.userId = data.user.id;
+          // Reindirizza o emetti un evento di successo
+          this.$router.push("/deadlines");
+        } catch (error) {
+          console.error("Errore nel login:", error);
+          this.error =
+            error.response?.data?.message || "Errore durante il login";
+        } finally {
+          this.isLoading = false;
         }
-        // Salvo il ruolo dell'utente nello store
-        store.userRole = data.user.role;
-        store.loggedIn = true;
-        store.userId = data.user.id;
-        // Reindirizza o emetti un evento di successo
-        this.$router.push("/deadlines");
-      } catch (error) {
-        console.error("Errore nel login:", error);
-        this.error = error.response?.data?.message || "Errore durante il login";
-      } finally {
-        this.isLoading = false;
-        
+      } else {
+        store.userName = null;
       }
     },
   },
