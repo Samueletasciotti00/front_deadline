@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar.vue";
 import Login from "./components/Login.vue";
 import Home from "./components/Home.vue";
 import Deadlines from "./components/Deadlines.vue";
+import MyDeadline from "./components/MyDeadlines.vue";
 
 export default {
   components: {
