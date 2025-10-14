@@ -1,6 +1,7 @@
 <script>
 import axios from "axios";
 import { store } from "../store";
+
 export default {
   name: "Deadlines",
   setup() {
@@ -31,27 +32,42 @@ export default {
       this.isLoading = true;
 
       try {
-        const response = await axios.get("http://127.0.0.1:3333/deadlines", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        const data = response.data;
-        this.deadlines = data;
+        const token = localStorage.getItem("token");
+        if (!token) {
+          this.error = "Non autenticato";
+          return;
+        }
 
-        // Aggiorno lo userRole nell
+        const response = await axios.get("http://127.0.0.1:3333/deadlines", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const data = response.data;
+
+        // Filtra in base al ruolo
+        this.deadlines =
+          store.userRole === "ADMIN"
+            ? data // Admin vede tutte le deadlines
+            : data.filter(
+                // Prendo tutte le deadline dato che sono admin
+                (deadline) => !deadline.takenByUserId
+              );
       } catch (error) {
         console.error("Errore nel caricamento delle deadlines:", error);
         this.error =
           error.response?.data?.message || "Errore durante il caricamento";
+
+        // se il token è invalido, rimuovilo
         localStorage.removeItem("token");
+        store.loggedIn = false;
+        store.userRole = null;
       } finally {
         this.isLoading = false;
       }
     },
-    takeDeadline(id) {
+    async takeDeadline(id) {
       try {
-        const response = axios.post(
+        const response = await axios.post(
           `http://127.0.0.1:3333/deadlines/${id}/take`,
           {},
           {
@@ -61,12 +77,13 @@ export default {
           }
         );
         alert("Hai preso in carico la deadline con ID: " + id);
+
+        // Aggiorna la lista locale per riflettere il cambio
+        this.callApi();
       } catch (error) {
         console.error("Errore nel prendere in carico la deadline:", error);
         this.error =
           error.response?.data?.message || "Errore durante il caricamento";
-      } finally {
-        this.isLoading = false;
       }
     },
   },
@@ -74,8 +91,6 @@ export default {
 </script>
 
 <template>
-  <!-- <h1>Pagina Delle Deadlines</h1> -->
-
   <div v-if="isLoading">Caricamento...</div>
   <div v-else-if="error" class="error">{{ error }}</div>
 
@@ -86,6 +101,7 @@ export default {
         <th>Titolo</th>
         <th>Descrizione</th>
         <th>Scadenza</th>
+        <th>Status</th>
         <th>Azioni</th>
       </tr>
     </thead>
@@ -94,13 +110,9 @@ export default {
         <td>{{ deadline.id }}</td>
         <td>{{ deadline.title }}</td>
         <td>{{ deadline.description }}</td>
+        <td>{{ formatDate(deadline.deadline) }}</td>
+        <td>{{ deadline.status }}</td>
         <td>
-          {{ formatDate(deadline.deadline) }}
-        </td>
-
-        <td>
-          <!-- QUI POI ANDRANNO I BOTTONI -->
-          <!-- Esempi (per ora solo placeholder) -->
           <button v-if="store.userRole === 'ADMIN'" class="action-btn">
             Modifica
           </button>
@@ -114,10 +126,6 @@ export default {
 </template>
 
 <style scoped>
-thead {
-  display: run-in;
-}
-
 .error {
   color: #ff6b6b;
   text-align: center;
@@ -129,8 +137,8 @@ thead {
   border-collapse: collapse;
   border-radius: 8px;
   overflow: hidden;
-  background-color: #2b2b2b; /* dark grey background */
-  color: rgba(255, 255, 255, 0.87); /* testo leggero */
+  background-color: #2b2b2b;
+  color: rgba(255, 255, 255, 0.87);
   font-family: "Google Sans Code", monospace;
   font-weight: 300;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
@@ -164,7 +172,6 @@ thead {
   font-size: 0.9rem;
 }
 
-/* Pulsanti */
 .action-btn {
   background-color: #3a3a3a;
   color: rgba(255, 255, 255, 0.87);
@@ -184,30 +191,18 @@ thead {
   color: #000;
 }
 
-/* Responsive per mobile */
 @media screen and (max-width: 768px) {
   .deadlines-table {
     width: 100%;
     font-size: 0.8rem;
   }
-
   .deadlines-table th,
   .deadlines-table td {
     padding: 8px 10px;
   }
-
   .action-btn {
     padding: 4px 8px;
     font-size: 0.75rem;
   }
-}
-
-/* Titolo pagina */
-h1 {
-  text-align: center;
-  margin-top: 2rem;
-  font-family: "Google Sans Code", monospace;
-  color: rgba(255, 255, 255, 0.87);
-  font-weight: 400;
 }
 </style>
