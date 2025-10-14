@@ -5,12 +5,14 @@ import App from './App.vue'
 import Home from './components/Home.vue'
 import Login from './components/Login.vue'
 import Deadlines from './components/Deadlines.vue'
+import MyDeadlines from './components/MyDeadlines.vue'
 import { store } from './store'
 
 const routes = [
   { path: '/', component: Home },
   { path: '/login', component: Login },
   { path: '/deadlines', component: Deadlines },
+  { path: '/my-deadlines', component: MyDeadlines },
 ]
 
 const router = createRouter({
