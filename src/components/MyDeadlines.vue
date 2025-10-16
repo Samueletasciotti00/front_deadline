@@ -32,7 +32,7 @@ export default {
       this.error = null;
       this.isLoading = true;
 
-      // Controllo se è già stato effettuato il login
+// Controllo se è già stato effettuato il login
       if (!store.loggedIn) {
         this.error = "Non autenticato";
         this.isLoading = false;
