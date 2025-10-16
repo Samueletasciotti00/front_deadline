@@ -33,6 +33,8 @@ export default {
           this.token = data.token;
           localStorage.setItem("token", data.token);
           localStorage.setItem("userRole", data.user.role);
+          localStorage.setItem("userName", data.user.name); // ← AGGIUNGI
+          localStorage.setItem("userId", data.user.id);
           // Opzionalmente salva le info utente
           if (data.email) {
             localStorage.setItem("userEmail", data.email);
