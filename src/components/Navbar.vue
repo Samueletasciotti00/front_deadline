@@ -1,19 +1,17 @@
 <script>
-import { store } from "../store";
+import { store, logout } from "../store";
 import { useRouter } from "vue-router";
 
 export default {
   setup() {
     const router = useRouter();
 
-    function logout() {
-      localStorage.removeItem("token");
-      store.loggedIn = false;
-      store.userName = null;
-      router.push("/login"); // cambio pagina SENZA refresh
+    function handleLogout() {
+      logout(); 
+      router.push("/login");
     }
 
-    return { store, logout };
+    return { store, logout: handleLogout };
   },
 };
 </script>
@@ -21,7 +19,7 @@ export default {
 <template>
   <nav>
     <span>Scadenziario - Comune di Priverno </span>
-    <span v-if="store.userName !== null">type: {{store.userName}}</span>
+    <span v-if="store.userName !== null">{{ store.userName }}</span>
 
     <ul>
       <!-- Mostra se NON loggato -->
