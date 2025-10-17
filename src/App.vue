@@ -4,6 +4,7 @@ import Login from "./components/Login.vue";
 import Home from "./components/Home.vue";
 import Deadlines from "./components/Deadlines.vue";
 import MyDeadline from "./components/MyDeadlines.vue";
+import Create from "./components/Create.vue";
 
 export default {
   components: {
@@ -11,6 +12,8 @@ export default {
     Login,
     Home,
     Deadlines,
+    MyDeadline,
+    Create
   },
 };
 </script>
