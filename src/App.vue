@@ -5,6 +5,7 @@ import Home from "./components/Home.vue";
 import Deadlines from "./components/Deadlines.vue";
 import MyDeadline from "./components/MyDeadlines.vue";
 import Create from "./components/Create.vue";
+import Modifica from "./components/Modifica.vue";
 
 export default {
   components: {
@@ -13,7 +14,8 @@ export default {
     Home,
     Deadlines,
     MyDeadline,
-    Create
+    Create,
+    Modifica
   },
 };
 </script>

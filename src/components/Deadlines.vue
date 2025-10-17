@@ -127,17 +127,22 @@ export default {
           <span v-else> — </span>
         </td>
         <td>
-          <button v-if="store.userRole === 'ADMIN'" class="action-btn">
-            Modifica
-          </button>
-          <button
-            v-if="deadline.user.name"
-            @click="takeDeadline(deadline.id)"
-            class="action-btn"
-          >
-            Prendi in carico
-          </button>
-          <button v-else class="disattivato">Prendi in carico</button>
+          <router-link :to="{ name: 'modify', params: { id: deadline.id } }">
+            <button v-if="store.userRole === 'ADMIN'" class="action-btn">
+              Modifica
+            </button>
+          </router-link>
+
+          <span>
+            <button
+              v-if="!deadline.takenByUserId"
+              @click="takeDeadline(deadline.id)"
+              class="action-btn"
+            >
+              Prendi in carico
+            </button>
+            <button v-else class="disattivato">Prendi in carico</button>
+          </span>
         </td>
       </tr>
     </tbody>

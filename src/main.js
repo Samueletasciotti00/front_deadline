@@ -7,6 +7,7 @@ import Login from './components/Login.vue'
 import Deadlines from './components/Deadlines.vue'
 import MyDeadlines from './components/MyDeadlines.vue'
 import Create from './components/Create.vue'
+import Modifica from './components/Modifica.vue'
 import { store } from './store'
 
 const routes = [
@@ -15,6 +16,7 @@ const routes = [
   { path: '/deadlines', component: Deadlines },
   { path: '/my-deadlines', component: MyDeadlines },
   { path: '/create', component: Create },
+  { path: '/modify/:id', component: Modifica, name: 'modify' },
 ]
 
 const router = createRouter({
