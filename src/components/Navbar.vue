@@ -7,8 +7,9 @@ export default {
     const router = useRouter();
 
     function handleLogout() {
-      logout(); 
+      logout();
       router.push("/login");
+      store.userName = null;
     }
 
     return { store, logout: handleLogout };
@@ -18,9 +19,15 @@ export default {
 
 <template>
   <nav>
-    <span>Scadenziario - Comune di Priverno </span>
-    <span v-if="store.userName !== null">{{ store.userName }}</span>
-
+    <div class="left">
+      <span class="user-name" v-if="store.userName && store.loggedIn">
+        {{ store.userName }}
+      </span>
+      <span class="user-name" v-else> 
+        <i class="fa-solid fa-circle-user"></i>
+      </span>
+      <span>Scadenziario - Comune di Priverno</span>
+    </div>
     <ul>
       <!-- Mostra se NON loggato -->
       <li v-if="!store.loggedIn">
@@ -54,10 +61,44 @@ export default {
 button:focus {
   outline: none;
 }
+
+.user-name {
+  color: white;
+  font-weight: bolder;
+  text-align: center;
+  border: 1px solid white;
+  padding: 0.5rem;
+}
+
+.user-name i {
+  color: white;
+  font-size: 1.5rem;
+}
+
 nav {
+  display: flex;
+  justify-content: space-between; /* Sinistra e destra */
+  align-items: center; /* Allinea verticalmente */
   background-color: #303134;
   color: white;
   padding: 1rem;
+}
+
+/* Gruppo sinistro (nome utente + titolo) */
+nav .left {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* spazio tra nome e titolo */
+}
+
+/* Gruppo destro (menu) */
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  align-items: center;
 }
 
 a {
@@ -70,7 +111,6 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
 }
 
 /* Impostazioni della lista */
