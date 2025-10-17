@@ -100,6 +100,7 @@ export default {
         <th>Descrizione</th>
         <th>Scadenza</th>
         <th>Status</th>
+        <th v-if="store.userRole == 'ADMIN'">Presa in Carido da</th>
         <th>Azioni</th>
       </tr>
     </thead>
@@ -109,14 +110,34 @@ export default {
         <td>{{ deadline.title }}</td>
         <td>{{ deadline.description }}</td>
         <td>{{ formatDate(deadline.deadline) }}</td>
-        <td>{{ deadline.status }}</td>
+        <td
+          :class="{
+            yellow: deadline.status === 'sospeso',
+            red: deadline.status === 'scaduto',
+            green: deadline.status === 'completato',
+          }"
+        >
+          {{ deadline.status }}
+        </td>
+
+        <td v-if="store.userRole == 'ADMIN'">
+          <span v-if="deadline.takenBy">
+            {{ deadline.takenBy.name }}
+          </span>
+          <span v-else> — </span>
+        </td>
         <td>
           <button v-if="store.userRole === 'ADMIN'" class="action-btn">
             Modifica
           </button>
-          <button @click="takeDeadline(deadline.id)" class="action-btn">
+          <button
+            v-if="deadline.user.name"
+            @click="takeDeadline(deadline.id)"
+            class="action-btn"
+          >
             Prendi in carico
           </button>
+          <button v-else class="disattivato">Prendi in carico</button>
         </td>
       </tr>
     </tbody>
@@ -128,6 +149,40 @@ export default {
 </template>
 
 <style scoped>
+/* General */
+.disattivato {
+  background-color: #555;
+  color: #aaa;
+  border: 1px solid #555;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-family: "Google Sans Code", monospace;
+  font-size: 0.85rem;
+  margin-right: 6px;
+  cursor: not-allowed;
+}
+
+tr th {
+  text-align: center;
+}
+
+tr td {
+  text-align: center;
+}
+
+.red {
+  color: #ff6b6b;
+  font-weight: bold;
+}
+.yellow {
+  color: #ffd93b;
+  font-weight: bold;
+}
+.green {
+  color: #6bcf6b;
+  font-weight: bold;
+}
+
 .error {
   color: #ff6b6b;
   text-align: center;

@@ -124,7 +124,15 @@ export default {
         <td>{{ deadline.title }}</td>
         <td>{{ deadline.description }}</td>
         <td>{{ formatDate(deadline.deadline) }}</td>
-        <td>{{ deadline.status }}</td>
+       <td
+          :class="{
+            yellow: deadline.status === 'sospeso',
+            red: deadline.status === 'scaduto',
+            green: deadline.status === 'completato',
+          }"
+        >
+          {{ deadline.status }}
+        </td>
         <td>
           <button @click="removeTask(deadline.id)" class="action-btn">
             Rimuovi
@@ -140,6 +148,18 @@ export default {
 </template>
 
 <style scoped>
+.red {
+  color: #ff6b6b;
+  font-weight: bold;
+}
+.yellow {
+  color: #ffd93b;
+  font-weight: bold;
+}
+.green {
+  color: #6bcf6b;
+  font-weight: bold;
+}
 .error {
   color: #ff6b6b;
   text-align: center;
