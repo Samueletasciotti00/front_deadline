@@ -29,6 +29,10 @@ export default {
       <span>Scadenziario - Comune di Priverno</span>
     </div>
     <ul>
+      <li v-if="store.loggedIn && store.userRole == 'ADMIN'">
+        <router-link to="/create"><button>Crea</button></router-link>
+      </li>
+
       <!-- Mostra se NON loggato -->
       <li v-if="!store.loggedIn">
         <router-link to="/"><button>Home</button></router-link>
