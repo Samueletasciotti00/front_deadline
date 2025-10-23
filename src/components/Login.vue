@@ -148,14 +148,13 @@ input:focus {
 }
 
 .login-btn {
-  width: 100%;
   padding: 12px;
   font-size: 1rem;
   font-weight: 600;
   background-color: #fff;
   color: #000;
   border: none;
-  border-radius: 8px;
+  border-radius: 15px;
   cursor: pointer;
   transition: opacity 0.2s, transform 0.1s;
 }
