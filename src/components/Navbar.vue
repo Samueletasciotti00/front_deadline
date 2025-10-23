@@ -69,9 +69,11 @@ button:focus {
 
 .user-name {
   color: white;
+  background: black;
   font-weight: bolder;
   text-align: center;
   border: 1px solid white;
+  border-radius: 14px;
   padding: 0.5rem;
 }
 
@@ -82,8 +84,11 @@ button:focus {
 
 nav {
   display: flex;
-  justify-content: space-between; /* Sinistra e destra */
-  align-items: center; /* Allinea verticalmente */
+  justify-content: space-between; 
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  top: 0;
   background-color: #303134;
   color: white;
   padding: 1rem;
@@ -133,7 +138,7 @@ button {
   color: white;
   padding: 0.5rem 1rem;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 14px;
   transition: 0.4s;
   font-weight: bolder;
 }

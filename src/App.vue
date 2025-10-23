@@ -23,12 +23,19 @@ export default {
 <template>
   <Navbar></Navbar>
   <transition name="zoom">
-    <router-view> </router-view>
+    <div class="transition">
+      <router-view> </router-view>
+    </div>
+    
   </transition>
 </template>
 
 
 <style scoped>
+.transition{
+  padding-top: 70px;
+}
+
 /* Pausa prima dell'entrata (usiamo delay) */
 .zoom-leave-active,
 .zoom-enter-active {
