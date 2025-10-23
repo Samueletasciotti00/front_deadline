@@ -129,19 +129,19 @@ export default {
         <td>
           <router-link :to="{ name: 'modify', params: { id: deadline.id } }">
             <button v-if="store.userRole === 'ADMIN'" class="action-btn">
-              Modifica
+              <i class="fa-solid fa-pen"></i>
             </button>
           </router-link>
 
-          <span>
+          <span class="edit_buttons">
             <button
               v-if="!deadline.takenByUserId"
               @click="takeDeadline(deadline.id)"
               class="action-btn"
             >
-              Prendi in carico
+              <i class="fa-solid fa-hand"></i>
             </button>
-            <button v-else class="disattivato">Prendi in carico</button>
+            <button v-else class="disattivato"><i class="fa-solid fa-hand"></i></button>
           </span>
         </td>
       </tr>
@@ -193,13 +193,20 @@ tr td {
   text-align: center;
   margin: 1rem 0;
 }
+
+.edit_buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
 .deadlines-table {
   width: 90%;
   margin: 2rem auto;
   border-collapse: collapse;
   border-radius: 8px;
   overflow: hidden;
-  background-color: #2b2b2b;
+  background: #303134;
   color: rgba(255, 255, 255, 0.87);
   font-family: "Google Sans Code", monospace;
   font-weight: 300;
