@@ -32,7 +32,7 @@ export default {
       this.error = null;
       this.isLoading = true;
 
-// Controllo se è già stato effettuato il login
+      // Controllo se è già stato effettuato il login
       if (!store.loggedIn) {
         this.error = "Non autenticato";
         this.isLoading = false;
@@ -99,6 +99,21 @@ export default {
         this.isLoading = false;
       }
     },
+    async updateStatus(deadline) {
+      try {
+        const token = localStorage.getItem("token");
+
+        const response = await axios.put(
+          `http://127.0.0.1:3333/deadlines/${deadline.id}/status`,
+          { status: deadline.status },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        console.log("Aggiornato!", response.data);
+      } catch (error) {
+        console.error("Errore aggiornando lo stato", error);
+      }
+    },
   },
 };
 </script>
@@ -124,15 +139,22 @@ export default {
         <td>{{ deadline.title }}</td>
         <td>{{ deadline.description }}</td>
         <td>{{ formatDate(deadline.deadline) }}</td>
-       <td
-          :class="{
-            yellow: deadline.status === 'sospeso',
-            red: deadline.status === 'scaduto',
-            green: deadline.status === 'completato',
-          }"
-        >
-          {{ deadline.status }}
+        <td>
+          <select
+            v-model="deadline.status"
+            @change="updateStatus(deadline)"
+            :class="{
+              yellow: deadline.status === 'sospeso',
+              red: deadline.status === 'scaduto',
+              green: deadline.status === 'completato',
+            }"
+          >
+            <option value="sospeso">Sospeso</option>
+            <option value="scaduto">Scaduto</option>
+            <option value="completato">Completato</option>
+          </select>
         </td>
+
         <td>
           <button @click="removeTask(deadline.id)" class="action-btn">
             Rimuovi
@@ -171,7 +193,6 @@ export default {
   border-collapse: collapse;
   border-radius: 8px;
   overflow: hidden;
-  background-color: #2b2b2b;
   color: rgba(255, 255, 255, 0.87);
   font-family: "Google Sans Code", monospace;
   font-weight: 300;
